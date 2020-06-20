@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .cx{
+            position: absolute;
+            top: 50px;
+            right: 600px;
+        }
+        body {
+            background: #ebeff7;
+        }
+
+        /*清除表格默认样式*/
+        table {
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 0;
+        }
+
+        table {
+            width: 640px;
+            margin: 100px auto;
+        }
+
+        th,
+        td {
+            border: 1px solid #99b0da;
+            text-align: center;
+        }
+
+        th {
+            font: 14px/30px "微软雅黑";
+            background: #dbe3fa;
+        }
+
+        td {
+            font: 12px/28px "微软雅黑";
+            background: #fff;
+        }
+
+        .bg {
+            background: #f4f7fc;
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+        .high {
+            color: #e54600;
+        }
+
+        .low {
+            color: #7171d1;
+        }
+
+        .space {
+            height: 4px;
+            border: none;
+            background: #ebeff7;
+        }
+    </style>
+</head>
+
+<body>
+    <p class="cx">查询城市天气：<input type="text" class="val"></p>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">日期</th>
+                <th colspan="2">天气现象</th>
+                <th>气温</th>
+                <th>风向</th>
+                <th>风力</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="2" class="bg xq">22日星期五</td>
+                <td class="bg" colspan="2">白天</td>
+                <td class="daytime">晴间多云</td>
+                <td class="high">高温7C</td>
+                <td class="daywind">无持续风向</td>
+                <td class="dayWP">微风</td>
+            </tr>
+            <tr>
+                <td class="bg" colspan="2">夜间</td>
+                <td class="night">晴</td>
+                <td class="low">低温-4C</td>
+                <td class="nightWind">无持续风向</td>
+                <td class="nightWP">微风</td>
+            </tr>
+            <tr>
+                <td colspan="7" class="space"></td>
+            </tr>
+            <tr>
+                <td rowspan="2" class="bg xq">22日星期五</td>
+                <td class="bg" colspan="2">白天</td>
+                <td class="daytime">晴间多云</td>
+                <td class="high">高温7C</td>
+                <td class="daywind">无持续风向</td>
+                <td class="dayWP">微风</td>
+            </tr>
+            <tr>
+                <td class="bg" colspan="2">夜间</td>
+                <td class="night">晴</td>
+                <td class="low">低温-4C</td>
+                <td class="nightWind">无持续风向</td>
+                <td class="nightWP">微风</td>
+            </tr>
+            <tr>
+                <td colspan="7" class="space"></td>
+            </tr>
+            <tr>
+                <td rowspan="2" class="bg xq">22日星期五</td>
+                <td class="bg" colspan="2">白天</td>
+                <td class="daytime">晴间多云</td>
+                <td class="high">高温7C</td>
+                <td class="daywind">无持续风向</td>
+                <td class="dayWP">微风</td>
+            </tr>
+            <tr>
+                <td class="bg" colspan="2">夜间</td>
+                <td class="night">晴</td>
+                <td class="low">低温-4C</td>
+                <td class="nightWind">无持续风向</td>
+                <td class="nightWP">微风</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <script>
+        var val = document.querySelector(".val")
+        // 日期
+        var xq = document.querySelectorAll(".xq")
+        // 夜晚
+        var night = document.querySelectorAll(".night")
+        var low = document.querySelectorAll(".low")
+        var nightWind = document.querySelectorAll(".nightWind")
+        var nightWP = document.querySelectorAll(".nightWP")
+        // 白天
+        var daytime = document.querySelectorAll(".daytime")
+        var high = document.querySelectorAll(".high")
+        var daywind = document.querySelectorAll(".daywind")
+        var dayWP = document.querySelectorAll(".dayWP")
+        // 鼠标抬起事件，当在表单输入完时，鼠标抬起，触发事件
+        val.addEventListener("change", changeHandler)
+        // 鼠标抬起事件回调函数 - 发送请求
+        function changeHandler() {
+            jsonp()
+        }
+
+
+        function jsonp() {
+            // 判断当input的value是否为空
+            if (!val.value) return
+
+            // 利用script的scr无限制跨域特性，获取接口的数据
+            // 创建script便签，并赋予src
+            var script = document.createElement("script")
+            script.src = 'https://www.tianqiapi.com/api/?version=v1&appid=63631217&appsecret=Zb99RiDd&callback=success&city=' + val.value
+            document.body.appendChild(script)
+            // 每次script创建成功之后，删除已经请求完的script标签
+            script.addEventListener("load", function () {
+                document.body.removeChild(script)
+            })
+
+            // 接口参数的请求 cb 回调函数 - wd 搜索关键词
+            function success(data) {
+                // data参数 - 接口请求回来的数据
+                var arr = data.data
+                console.log(data.data)
+                arr.forEach(function(itme,index){
+                        if(index > 3) return
+                        xq[index].innerHTML = itme.day + itme.week
+                        daytime[index].innerHTML = itme.wea
+                        high[index].innerHTML =  "高温"+itme.tem
+                        low[index].innerHTML =  "高温"+itme.tem2
+                        night[index].innerHTML =  itme.hours[3].wea
+                        daywind[index].innerHTML =  itme.hours[0].win
+                        nightWind[index].innerHTML =  itme.hours[3].win
+                        dayWP[index].innerHTML =  itme.win_speed
+                        nightWP[index].innerHTML =  itme.win_speed                             
+                })     
+            }
+            // 将当前函数挂在window上，因为接口请求的回调函数必须是全局的
+            window.success = success
+        }
+
+
+
+        /* 天气预报接口（一周天气信息）
+        url地址:https://www.tianqiapi.com/api/?version=v1&appid=63631217&appsecret=Zb99RiDd
+
+        -----请求参数-----
+        city       城市名称，不要带市和区
+        callback   回调函数
+
+        -----返回数据-----
+        json对象 */
+    </script>
+</body>
+
+</html>
