@@ -183,9 +183,8 @@
             function success(data) {
                 // data参数 - 接口请求回来的数据
                 var arr = data.data
-                console.log(data.data)
                 arr.forEach(function(itme,index){
-                        if(index > 3) return
+                        if(index > 2) return
                         xq[index].innerHTML = itme.day + itme.week
                         daytime[index].innerHTML = itme.wea
                         high[index].innerHTML =  "高温"+itme.tem
